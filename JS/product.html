@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Product</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<style>
+    .fit_image{
+
+        width: 100%;
+        object-fit: cover;
+        height: 100%;
+    }
+</style>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-md-4">
+            <div class="py-3 rounded shadow-lg p-3 mb-5 bg-white p-3 mt-3">
+                <h3 class="text-center">Add Product</h3>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Product Name</label>
+                      <input type="text" class="form-control" id="pName" placeholder="Product Name">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Description</label>
+                      <input type="text" class="form-control" id="productDescription" placeholder="Product Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Description</label>
+                        <input type="file" class="form-control" id="Image" placeholder="Description">
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="exampleInputPassword1">Quantity</label>
+                        <input type="number" class="form-control" id="Quantity" placeholder="Quantity">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exampleInputPassword1">Price</label>
+                        <input type="number" class="form-control" id="Price" placeholder="Price">
+                    </div>
+                    </div>
+
+                    <button onclick="addproduct()" class="btn btn-primary">Add Product</button>
+                 
+            </div>
+            <div class="rounded shadow-lg p-3 mb-5 bg-white">
+                <h3>Cart</h3>
+                <hr>
+                <div class="cart-view row" id = "all-cart">
+                    <div class="col-md-4"><span>Item</span></div>
+                    <div class="col-md-4"><span>Price</span></div>
+                    <div class="col-md-4"><span>Remove</span></div>
+                </div>
+                
+                <hr>
+            </div>
+        </div>
+        <div class="col-md-8 rounded shadow-lg p-3 mb-5 bg-white mt-3" id="productlist">
+        <h3 class="text-center">Products</h3>
+        <hr>
+            <div class="product-view row pl-2" id="product-list-view">
+            </div>
+         </div>
+        </div>
+    </div>
+
+
+<script>
+
+        function addproduct(){
+
+            let files = document.getElementById("Image").files;
+
+            if(files && files.length){
+
+                var filereader = new FileReader();
+
+                filereader.onload = function(){
+
+                    var product = document.createElement("div");
+              
+                    var productName = document.createElement("h5");
+                    var productDescription = document.createElement("p");
+                    var productQuantity = document.createElement("p");
+                    var productPrice = document.createElement("p");
+                    var button = document.createElement("button");
+                   
+                   
+                  
+
+                    product.style = "width:33%; height:33%;"
+                    var image = document.createElement("img");
+
+                    productName.innerHTML = "Name : " + document.getElementById("pName").value;
+                    productDescription.innerHTML = "Description : " + document.getElementById("productDescription").value;
+                    productQuantity.innerHTML = "Quantity : " + document.getElementById("Quantity").value;
+                    productPrice.innerHTML = "  Price : " + document.getElementById("Price").value;
+                    
+                  
+                    image.src = filereader.result;
+                    image.classList.add("img-thumbnail");
+                    image.className += " cart-img";
+                
+                    
+
+                    product.appendChild(image);
+                    product.className += "rounded shadow-lg p-3 mb-5 bg-white col-md-4";
+                    
+                    product.appendChild(productName);
+
+                    product.appendChild(productDescription);
+                    product.appendChild(productQuantity);
+                    product.appendChild(productPrice);
+                    product.appendChild(button); 
+                    document.getElementById("product-list-view").appendChild(product);
+                    button.innerHTML = "Add to Cart"
+                    button.className += "add-cart btn btn-primary ";
+                    btns = document.getElementsByClassName("add-cart");
+                    for(var i = 0; i < btns.length; i++){
+
+                        var btn = btns[i];
+                        btn.addEventListener("click",function(event){
+
+                            btnclick = event.target;
+                           var imgCart = btnclick.parentElement.childNodes[0].src;
+                           var cartName = btnclick.parentElement.childNodes[1].innerText;
+                           console.log(cartName);
+
+                           
+                        });
+                    }
+
+  
+                    
+
+                }
+
+                filereader.readAsDataURL(files[0]);
+        
+             }
+             
+        }
+
+        
+       
+            
+            
+        
+
+       
+
+        
+
+</script>
+
+
+</body>
+</html>
