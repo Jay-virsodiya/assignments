@@ -91,3 +91,17 @@
 
 -- ALTER TABLE Publisher ADD AccessLevel VARCHAR(30);
 
+--procedure demo
+
+-- delimiter //
+-- CREATE PROCEDURE Demo()
+-- BEGIN
+-- SELECT * FROM Individual AS Ind
+-- INNER JOIN  Publisher As Pb
+-- ON Ind.IndividualId = Pb.IndividualId;
+-- END //
+-- delimiter ;
+
+
+--  call demo()
+
