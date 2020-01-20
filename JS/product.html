@@ -30,8 +30,8 @@
                       <input type="text" class="form-control" id="productDescription" placeholder="Product Description">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Description</label>
-                        <input type="file" class="form-control" id="Image" placeholder="Description">
+                        <label for="exampleInputPassword1" >Image</label>
+                        <input type="file" class="form-control" id="Image" accept=".png, .jpg, .jpeg">
                     </div>
                     <div class="form-row">
                     <div class="form-group col-md-6">
@@ -48,14 +48,14 @@
                  
             </div>
             <div class="rounded shadow-lg p-3 mb-5 bg-white" id = "all-cart">
-                <h3>Cart</h3>
+                <h3 class="text-center">Cart</h3>
+                <h5 class="text-right" id="tot-price"></h5>
                 <hr>
                 <div class="cart-view row" >
                     <div class="col-md-6 text-center"><span>Item</span></div>
                     <div class="col-md-3 text-center"><span>Price</span></div>
                     <div class="col-md-3 text-center"><span>Remove</span></div>
                 </div>
-                
                 <hr>
             </div>
         </div>
@@ -71,222 +71,238 @@
 
 <script>
 
-        var token = 0;
+var token = 0;
+var allCartTotal=0;
 
-        function addproduct(){
+function addproduct(){
 
-            let files = document.getElementById("Image").files;
+    let files = document.getElementById("Image").files;
+    if(files && files.length){
 
-            if(files && files.length){
+        var filereader = new FileReader();
+        filereader.onload = function(){
+            token += 1;
 
-                var filereader = new FileReader();
+            var product = document.createElement("div");
+      
+            var productName = document.createElement("h5");
+            var productDescription = document.createElement("p");
+            var productQuantity = document.createElement("p");
+            var productPrice = document.createElement("p");
+            var button = document.createElement("button");
 
-                filereader.onload = function(){
-                    token += 1;
+            product.style = "width:33%; height:33%;"
+            var image = document.createElement("img");
 
-                    var product = document.createElement("div");
-              
-                    var productName = document.createElement("h5");
-                    var productDescription = document.createElement("p");
-                    var productQuantity = document.createElement("p");
-                    var productPrice = document.createElement("p");
-                    var button = document.createElement("button");
-                   
-                   
-                  
+            productName.innerHTML = "Name : " + document.getElementById("pName").value;
+            productDescription.innerHTML = "Description : " + document.getElementById("productDescription").value;
+            productQuantity.innerHTML = "Quantity : " + document.getElementById("Quantity").value;
+            productPrice.innerHTML = "  Price : Rs." + document.getElementById("Price").value;
+            
+          
+            image.src = filereader.result;
+            image.classList.add("img-thumbnail");
+            image.className += " cart-img";
+        
+            
 
-                    product.style = "width:33%; height:33%;"
-                    var image = document.createElement("img");
-
-                    productName.innerHTML = "Name : " + document.getElementById("pName").value;
-                    productDescription.innerHTML = "Description : " + document.getElementById("productDescription").value;
-                    productQuantity.innerHTML = "Quantity : " + document.getElementById("Quantity").value;
-                    productPrice.innerHTML = "  Price : Rs." + document.getElementById("Price").value;
-                    
-                  
-                    image.src = filereader.result;
-                    image.classList.add("img-thumbnail");
-                    image.className += " cart-img";
-                
-                    
-
-                    product.appendChild(image);
-                    product.className += "rounded shadow-lg p-3 mb-5 bg-white col-md-4";
-                    
-                    product.appendChild(productName);
+            product.appendChild(image);
+            product.className += "rounded shadow-lg p-3 mb-5 bg-white col-md-4";
+            
+            product.appendChild(productName);
 
 
-                    product.appendChild(productDescription);
-                    product.appendChild(productQuantity);
-                    product.appendChild(productPrice);
-                    product.appendChild(button); 
-                    document.getElementById("product-list-view").appendChild(product);
-                    product.setAttribute("id", token);
-                    button.innerHTML = "Add to Cart"
-                    button.className += "add-cart btn btn-primary ";
+            product.appendChild(productDescription);
+            product.appendChild(productQuantity);
+            product.appendChild(productPrice);
+            product.appendChild(button); 
+            document.getElementById("product-list-view").appendChild(product);
+            product.setAttribute("id", token);
+            button.innerHTML = "Add to Cart"
+            button.className += "add-cart btn btn-primary ";
 
-                    /*document.getElementById("pName").value = "";
-                    document.getElementById("Quantity").value = "";
-                    document.getElementById("productDescription").value = "";
-                    document.getElementById("Price").value = "";
-                    document.getElementById("Image").value = "";*/
+            document.getElementById("pName").value = "";
+            document.getElementById("Quantity").value = "";
+            document.getElementById("productDescription").value = "";
+            document.getElementById("Price").value = "";
+            document.getElementById("Image").value = "";
 
-                    
-                  
-                    btns = document.getElementsByClassName("add-cart");
-                    for(var i = 0; i < btns.length; i++){
-
-                        var btn = btns[i];
-                        btn.onclick = function(event){
-
-                           
-                           var btnclick = event.target;
-                           var Quantity = btnclick.parentElement.childNodes[3].innerText;
-                           var matches = Quantity.match(/(\d+)/);
-                           Quantity = matches[0];
-                           
-
-                           var cartQuan = parseInt(prompt("Enter Quantity"));
-                           
-                           if(Quantity >= cartQuan){
-                           
-
-                           
-                           var imgCart = btnclick.parentElement.childNodes[0].src;
-                           var cartName = btnclick.parentElement.childNodes[1].innerText;
-                           var spName = cartName.substr(7);
-                           cartName = spName;
-                       
-                          
-
-                           
-                           var price = btnclick.parentElement.childNodes[4].innerText;
-                           matches = price.match(/(\d+)/);
-                           price = matches[0];
-                           
-                           var cartTotal = price * cartQuan;
-                           Quantity = Quantity-cartQuan;
-                           if(Quantity == 0){
-                                    btnclick.parentElement.childNodes[3].innerHTML = "Quantity : 0(Out of Stock)" ;
-                           }else{
-                                    btnclick.parentElement.childNodes[3].innerHTML = "Quantity : " + Quantity;
-                           }
-                           console.log();
-                           var cartItem = document.createElement("div");
-                           var cartImgDiv = document.createElement("div");
-                           var cartTotalDiv = document.createElement("div");
-                           var cartRemoveDiv = document.createElement("div");
-                           var imgNameDiv = document.createElement("div");
-                           var imgDiv = document.createElement("div");
-                           var nameDiv = document.createElement("div");
-                           var total = document.createElement("span");
-                           var name = document.createElement("span");
-                           var removeBtn = document.createElement("button");
-                           var cartImg = document.createElement("img");
-                           var hr = document.createElement("hr");
-                           var hiddenInput = document.createElement("input");
-                           hiddenInput.setAttribute("type","hidden");
-
-
-                           var cartView = document.getElementById("all-cart");
-
-                           cartImg.src = imgCart;
-
-                           cartView.appendChild(cartItem);
-                           cartItem.appendChild(hiddenInput);
-                           hiddenInput.value = btnclick.parentElement.id;
-                           cartItem.className += "row border-bottom m-2";
-                           cartItem.appendChild(cartImgDiv);
-                           cartImgDiv.className = "col-md-6";
-                           
-                           cartImgDiv.appendChild(imgNameDiv);
-                           imgNameDiv.className += "row pb-1";
-                           imgNameDiv.appendChild(imgDiv);
-                           imgDiv.className += "col-md-6"
-                           imgDiv.appendChild(cartImg);
-                           cartImg.className += "fit_image";
-
-                           imgNameDiv.appendChild(nameDiv);
-                           nameDiv.className += "col-md-6";
-                           nameDiv.appendChild(name);
-                           name.innerHTML = cartName +"<br>Q-"+cartQuan;
-
-                           cartItem.appendChild(cartTotalDiv);
-                           cartTotalDiv.className = "col-md-3";
-                           
-
-                           cartTotalDiv.appendChild(total);
-                           total.innerHTML = "Rs." +cartTotal;
-                           
-                           cartItem.appendChild(cartRemoveDiv);
-                           cartRemoveDiv.className = "col-md-3";
-                           cartRemoveDiv.appendChild(removeBtn);
-                           removeBtn.innerHTML = "Remove";
-                           removeBtn.className += "btn btn-danger remove-cart";
-                        
-                           cartItem.appendChild(hr);
-                           }else{
-
-                               alert("product is out of stock");
-                           }
-                          
-                        
-                            var rembtns = document.getElementsByClassName("remove-cart");
-                            
-                            for(var i = 0; i < rembtns.length; i++){
-
-                            var rembtn = rembtns[i];
-                            
-                            rembtn.onclick = function(event){
-
-                            var rbtnclick = event.target;
-                            
-                            rbtnclick.parentElement.parentElement.remove();
-                            var searchId = rbtnclick.parentElement.parentElement.childNodes[0].value;
-                            var searchProduct = document.getElementById(searchId);
-
-                            var mQuantity = searchProduct.childNodes[3].innerText;
-                            var matches = mQuantity.match(/(\d+)/);
-                            mQuantity = matches[0];
-
-                            var rQuantity = rbtnclick.parentElement.parentElement.childNodes[1].childNodes[0].childNodes[1].childNodes[0].innerText;
-                            var rMatches = rQuantity.match(/(\d+)/);
-                            rQuantity = rMatches[0];
-
-                            console.log(rQuantity);
-
-                            if(mQuantity == "0"){
-
-                                searchProduct.childNodes[3].innerHTML = "Quantity : "+ rQuantity;
-                            }else{
-                            
-                            searchProduct.childNodes[3].innerHTML = "Quantity : " + (parseInt(mQuantity) + parseInt(rQuantity));
-                             
-                            }
-
-                            }
-
-                          
-
-                        } 
-                        
-                                          
-                        }
-
-                        
-
-                    }
-
-
-                        
-
-                   
-
-                    
-                }
-                filereader.readAsDataURL(files[0]);
-             }     
+            
+          
+            btns = document.getElementsByClassName("add-cart");
+            addToCart(btns);
+        
         }
+                filereader.readAsDataURL(files[0]);
+    }     
+}
+
+
+
+function addToCart(btns){
+    
+    for(var i = 0; i < btns.length; i++){
+
+        var btn = btns[i];
+        btn.onclick = function(event){
+
+            var btnclick = event.target;
+            var Quantity = btnclick.parentElement.childNodes[3].innerText;
+            var matches = Quantity.match(/(\d+)/);
+            Quantity = matches[0];
+        
+            var cartQuan = parseInt(prompt("Enter Quantity"));
+            if(Quantity >= cartQuan){
+        
+            var imgCart = btnclick.parentElement.childNodes[0].src;
+            var cartName = btnclick.parentElement.childNodes[1].innerText;
+            var spName = cartName.substr(7);
+            cartName = spName;
+        
+            
+            var price = btnclick.parentElement.childNodes[4].innerText;
+            matches = price.match(/(\d+)/);
+            price = matches[0];
+            
+            var cartTotal = price * cartQuan;
+            allCartTotal = allCartTotal + cartTotal;
+            Quantity = Quantity-cartQuan;
+            
+            var cartAllTotal = document.getElementById("tot-price");
+            cartAllTotal.innerHTML = "Total : Rs." + allCartTotal;
+
+
+            if(Quantity == 0){
+
+                        btnclick.parentElement.childNodes[3].innerHTML = "Quantity : 0(Out of Stock)" ;
+            }else{
+
+                        btnclick.parentElement.childNodes[3].innerHTML = "Quantity : " + Quantity;
+            }
+            console.log();
+            var cartItem = document.createElement("div");
+            var cartImgDiv = document.createElement("div");
+            var cartTotalDiv = document.createElement("div");
+            var cartRemoveDiv = document.createElement("div");
+            var imgNameDiv = document.createElement("div");
+            var imgDiv = document.createElement("div");
+            var nameDiv = document.createElement("div");
+            var total = document.createElement("span");
+            var name = document.createElement("span");
+            var removeBtn = document.createElement("button");
+            var cartImg = document.createElement("img");
+            var hr = document.createElement("hr");
+            var hiddenInput = document.createElement("input");
+            hiddenInput.setAttribute("type","hidden");
+
+
+            var cartView = document.getElementById("all-cart");
+
+            cartImg.src = imgCart;
+
+            cartView.appendChild(cartItem);
+            cartItem.appendChild(hiddenInput);
+            hiddenInput.value = btnclick.parentElement.id;
+            cartItem.className += "row border-bottom m-2";
+            cartItem.appendChild(cartImgDiv);
+            cartImgDiv.className = "col-md-6";
+            
+            cartImgDiv.appendChild(imgNameDiv);
+            imgNameDiv.className += "row pb-1";
+            imgNameDiv.appendChild(imgDiv);
+            imgDiv.className += "col-md-6"
+            imgDiv.appendChild(cartImg);
+            cartImg.className += "fit_image";
+
+            imgNameDiv.appendChild(nameDiv);
+            nameDiv.className += "col-md-6";
+            nameDiv.appendChild(name);
+            name.innerHTML = cartName +"<br>Q-"+cartQuan;
+
+            cartItem.appendChild(cartTotalDiv);
+            cartTotalDiv.className = "col-md-3";
+            
+
+            cartTotalDiv.appendChild(total);
+            total.innerHTML = "Rs." +cartTotal;
+            
+            cartItem.appendChild(cartRemoveDiv);
+            cartRemoveDiv.className = "col-md-3";
+            cartRemoveDiv.appendChild(removeBtn);
+            removeBtn.innerHTML = "Remove";
+            removeBtn.className += "btn btn-danger remove-cart";
+            
+            cartItem.appendChild(hr);
+            }
+            else{
+
+                alert("product is out of stock");
+                return;
+            }
+            
+             var rembtns = document.getElementsByClassName("remove-cart");  
+             removeCartItem(rembtns);                            
+        }
+    }
+}
+
+function removeCartItem(rembtns){
+
+    for(var i = 0; i < rembtns.length; i++){
+
+        var rembtn = rembtns[i];
+        
+        rembtn.onclick = function(event){
+
+            var rbtnclick = event.target;
+            
+           
+            var searchId = rbtnclick.parentElement.parentElement.childNodes[0].value;
+            var searchProduct = document.getElementById(searchId);
+
+            var mQuantity = searchProduct.childNodes[3].innerText;
+            var matches = mQuantity.match(/(\d+)/);
+            mQuantity = matches[0];
+
+            var rQuantity = rbtnclick.parentElement.parentElement.childNodes[1].childNodes[0]
+            .childNodes[1].childNodes[0].innerText;
+
+            var rMatches = rQuantity.match(/(\d+)/);
+            rQuantity = rMatches[0];
+
+            console.log(rQuantity);
+
+            if(mQuantity == "0"){
+
+                searchProduct.childNodes[3].innerHTML = "Quantity : "+ rQuantity;
+
+            }else{
+            
+                searchProduct.childNodes[3].innerHTML = "Quantity : " + (parseInt(mQuantity) + parseInt(rQuantity));
+            
+            }
+
+            var totPrice = rbtnclick.parentElement.parentElement.childNodes[2].innerText;
+            
+            var matches = totPrice.match(/(\d+)/);
+            totPrice = matches[0];
+
+            console.log(totPrice);
+
+            var cartAllTotalLabel = document.getElementById("tot-price");
+            var cartAllTotal = cartAllTotalLabel.innerText;
+            var matches = cartAllTotal.match(/(\d+)/);
+            cartAllTotal = matches[0];
+            
+            cartAllTotalLabel.innerHTML = "Total : Rs." + (parseInt(cartAllTotal)-parseInt(totPrice));
+
+            rbtnclick.parentElement.parentElement.remove();
+            allCartTotal = (parseInt(cartAllTotal)-parseInt(totPrice));
+        }            
+    }
+}
+
+
 
 </script>
 
