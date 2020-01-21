@@ -1,0 +1,95 @@
+
+Redis command anas queries
+
+1) configuration command 
+	
+	-CONFIG GET *
+	-CONFIG GET loglevel
+	-CONFIG SET "loglevel" "verbose"
+	
+2)Redis keys
+
+		-SET bdms redis
+		-DEL dbms
+		-DUMP dbms
+		-EXPIRE dbms 60(time in second)
+		-PEXPIRE dbms 2000(time in millisecond)
+		-RENAME dbms 
+		-TYPE dbms
+		
+3) HASH MAP redis
+
+	-HMSET dbms redis mongodb MySql sqlserver(used to store key value pair in hash map)
+	-HGET dbms redis(get value of given key from hash map)
+	-HGETALL dbms(return all key value pair)
+	-HEXISTS dbms redis(check if redis key exists in dbms hashmap or not) 
+
+4) redis List
+
+	-LPUSH databases redis mongodb MySql sqlserver(insert value in list)
+	
+		
+
+
+
+
+
+
+*************************MongoDB basic Queries************************************
+
+
+for creating databases
+
+		- use JayDB
+		- show dbs(this query will show all database list)
+		- db.dropDatabase() (this query is used to drop database)
+		- db.createCollection("Movie") (this query will create collection)
+		- db.Movie.drop() (used to drop collection)
+		
+filter data from collection(Operators)
+		- db.Movie.find({ $or: [ {"Name": "jay"},{"like": "100"}]}).pretty() (OR operator)
+		- db.Movie.find({ $and: [ {"Name": "jay"},{"like": "100"}]}).pretty() (AND operator)
+		- db.Movie.find({ $and: [ {"Name": "jay"},{"like": {$gt:10}}]}).pretty() (GREATER THAN operator)
+		- db.Movie.find({"like":{$gte:10}}) (GREATER THAN EQUALs operator)
+		
+Update data from document
+
+		- db.Movie.update({$and:[{"Name":"Jack"},{"dislike":200}]},{$set:{"Name":"Jack","dislike":20}})
+		
+remove data from document
+
+		- db.Movie.remove({$and:[{"Name":"Jack"},{"like":{$gt:20}}]})
+		
+limit recored in mongodb
+
+		- db.Movie.find().pretty().limit(3).skip(1)
+		- db.Movie.find({},{"like":1,_id:0}).limit(2)
+
+for sorting document
+
+		-db.Movie.find().pretty().sort({"Name": -1}) (1 is used for ascending -1 is used for descending)
+
+
+aggregation (same as group by in SQL)
+
+		- db.Movie.aggregation([$group:{_id:"$Name",count:{$sum:1}}])
+		
+taking backup and restore 
+
+		- mongodump --collection Movie --db test
+		- mongorestore --collection Movie --db test
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
