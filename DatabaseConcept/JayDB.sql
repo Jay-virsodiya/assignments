@@ -105,3 +105,12 @@
 
 --  call demo()
 
+
+-- delimiter //
+-- CREATE PROCEDURE cov_to_json()
+-- BEGIN
+-- SELECT JSON_ARRAYAGG(JSON_OBJECT('id', IndividualId, 'AccessLevel', AccessLevel))
+-- from publisher;
+-- END //
+-- delimiter ;
+
